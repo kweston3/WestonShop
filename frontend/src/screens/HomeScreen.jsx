@@ -1,6 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import HeroSection from "../components/HeroSection";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -32,7 +33,21 @@ const HomeScreen = () => {
       ) : (
         <>
           <Meta />
-          <h1 className="mt-4">Welcome to WestonShop</h1>
+          {data.products.length > 5 && (
+            <HeroSection product={data.products[5]} />
+          )}
+          <h1
+            bg="dark"
+            variant="dark"
+            className="mt-4 text-center"
+            style={{
+              color: "white",
+              backgroundColor: "#7b8a8b",
+              padding: "20px",
+            }}
+          >
+            Best Selling Products
+          </h1>
           <Row>
             {data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
