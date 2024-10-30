@@ -32,9 +32,34 @@ const CartScreen = () => {
     navigate("/login?redirect=/shipping");
   };
 
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.qty * item.price,
+    0
+  );
+  const itemCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
+
   return (
     <Row>
       <Col md={8}>
+        {/* Show subtotal at the top on small screens */}
+        <Card className="d-block d-md-none mb-3">
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              <h2>Subtotal ({itemCount}) items</h2>${subtotal.toFixed(2)}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Button
+                type="button"
+                className="btn-block"
+                disabled={cartItems.length === 0}
+                onClick={checkoutHandler}
+              >
+                Proceed to Checkout
+              </Button>
+            </ListGroup.Item>
+          </ListGroup>
+        </Card>
+
         <h1 style={{ marginBottom: "20px" }}>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
@@ -53,7 +78,6 @@ const CartScreen = () => {
                   </Col>
                   <Col md={2}>${item.price}</Col>
                   <Col md={2}>
-                    {" "}
                     <Form.Control
                       as="select"
                       value={item.qty}
@@ -83,18 +107,13 @@ const CartScreen = () => {
           </ListGroup>
         )}
       </Col>
+
       <Col md={4}>
-        <Card>
+        {/* Show subtotal below items on medium screens and larger */}
+        <Card className="d-none d-md-block">
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+              <h2>Subtotal ({itemCount}) items</h2>${subtotal.toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
               <Button

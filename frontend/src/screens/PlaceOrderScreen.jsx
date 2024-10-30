@@ -46,7 +46,7 @@ const PlaceOrderScreen = () => {
     <>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
-        <Col md={8}>
+        <Col md={8} xs={12} className="order-items">
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Shipping</h2>
@@ -97,45 +97,41 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
           </ListGroup>
         </Col>
-        <Col md={4}>
+
+        {/* Order Summary will be on top for small screens */}
+        <Col md={4} xs={12} className="order-summary">
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Items:</Col>
                   <Col>${cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping:</Col>
                   <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Tax:</Col>
                   <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Total:</Col>
                   <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Button
                   type="button"
@@ -151,6 +147,18 @@ const PlaceOrderScreen = () => {
           </Card>
         </Col>
       </Row>
+
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .order-items {
+            order: 1; // Ensure order items come second
+          }
+          .order-summary {
+            order: 0; // Order summary comes first
+            margin-bottom: 20px; // Add some margin to separate from order items
+          }
+        }
+      `}</style>
     </>
   );
 };

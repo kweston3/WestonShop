@@ -24,12 +24,10 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
-
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const {
@@ -69,14 +67,6 @@ const OrderScreen = () => {
       }
     });
   }
-
-  // TESTING ONLY! REMOVE BEFORE PRODUCTION
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
-
-  //   toast.success('Order is paid');
-  // }
 
   function onError(err) {
     toast.error(err.message);
@@ -186,7 +176,7 @@ const OrderScreen = () => {
             </ListGroup.Item>
           </ListGroup>
         </Col>
-        <Col md={4}>
+        <Col md={4} className="payment-container">
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
@@ -219,18 +209,15 @@ const OrderScreen = () => {
               {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
-
                   {isPending ? (
                     <Loader />
                   ) : (
                     <div>
-                      <div>
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        ></PayPalButtons>
-                      </div>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                      />
                     </div>
                   )}
                 </ListGroup.Item>
@@ -256,6 +243,18 @@ const OrderScreen = () => {
           </Card>
         </Col>
       </Row>
+
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .payment-container {
+            order: -1; // Ensures payment card comes on top in smaller screens
+            margin-bottom: 20px; // Adds spacing below the payment card
+          }
+          .order-summary {
+            order: 1; // Ensures order summary comes below payment card
+          }
+        }
+      `}</style>
     </>
   );
 };
